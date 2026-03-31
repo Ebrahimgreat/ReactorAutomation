@@ -14,6 +14,13 @@ The app monitors product stock levels in real time. When a product drops to or b
 
 All workflow steps are tracked in real time in the UI using Phoenix LiveView.
 
+<img width="519" height="582" alt="Screenshot 2026-03-31 at 12 21 27 PM" src="https://github.com/user-attachments/assets/e7a0a744-b751-4626-8d05-64ca7b09ce42" />
+
+
+
+
+
+
 ## Tech stack
 
 - **Elixir / Phoenix 1.8** — backend and web framework
