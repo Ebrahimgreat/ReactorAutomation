@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Naheed – Product Catalog</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #111; }
+    h1 { color: #e63946; }
+    .supplier-meta { color: #555; margin-bottom: 24px; font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #e63946; color: white; }
+    th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #eee; }
+    tr:hover { background: #fef2f2; }
+    .price { font-weight: bold; color: #e63946; }
+    .btn { background: #e63946; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    .btn:hover { background: #c1121f; }
+    #loading { color: #888; padding: 20px 0; }
+  </style>
+</head>
+<body data-supplier="Naheed">
+  <h1>Naheed Supermarket</h1>
+  <div class="supplier-meta">Contact: support@naheed.pk</div>
+
+  <table id="product-catalog">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Unit</th>
+        <th>Price (Rs.)</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="product-rows">
+      <tr><td colspan="4" id="loading">Loading products...</td></tr>
+    </tbody>
+  </table>
+
+  <div id="order-confirmation" style="display:none; margin-top:24px; padding:16px; background:#d4edda; border:1px solid #28a745; border-radius:6px; color:#155724;">
+    <strong>Order placed successfully!</strong>
+    <p id="order-details" style="margin:4px 0 0;"></p>
+  </div>
+
+  <script>
+    const supplierName = document.body.dataset.supplier;
+
+    fetch(`/api/suppliers/by-name/${encodeURIComponent(supplierName)}/products`)
+      .then(r => r.json())
+      .then(products => {
+        const tbody = document.getElementById('product-rows');
+        tbody.innerHTML = products.map(p => `
+          <tr data-product="${p.name.toLowerCase()}">
+            <td class="product-name">${p.name}</td>
+            <td class="product-unit">${p.unit}</td>
+            <td class="product-price price">${parseFloat(p.price).toFixed(2)}</td>
+            <td><button class="btn add-to-cart" data-product="${p.name.toLowerCase()}" data-price="${p.price}"
+              >Add to Cart</button></td>
+          </tr>
+        `).join('');
+
+        tbody.querySelectorAll('.add-to-cart').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.getElementById('order-details').textContent =
+              `${btn.dataset.product} ordered at Rs. ${parseFloat(btn.dataset.price).toFixed(2)}`;
+            document.getElementById('order-confirmation').style.display = 'block';
+          });
+        });
+      })
+      .catch(() => {
+        document.getElementById('loading').textContent = 'Failed to load products.';
+      });
+  </script>
+</body>
+</html>

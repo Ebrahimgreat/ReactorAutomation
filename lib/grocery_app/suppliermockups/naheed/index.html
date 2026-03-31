@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Naheed - Mock</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
+    h1 { color: #c8102e; }
+    #search-row { display: flex; gap: 8px; margin-bottom: 24px; }
+    #search { padding: 10px; font-size: 15px; flex: 1; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 10px 20px; background: #c8102e; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    button:hover { background: #a00d24; }
+    .product { display: flex; justify-content: space-between; align-items: center; padding: 14px; border: 1px solid #eee; border-radius: 6px; margin-bottom: 10px; }
+    .product-name { font-weight: 600; font-size: 15px; }
+    .product-unit { font-size: 12px; color: #888; margin-top: 2px; }
+    .product-price { color: #c8102e; font-weight: 700; font-size: 16px; margin-right: 12px; }
+    .add-to-cart { background: #c8102e; }
+    #cart { margin-top: 24px; padding: 16px; border: 2px solid #c8102e; border-radius: 8px; display: none; }
+    #cart h2 { margin: 0 0 12px; color: #c8102e; }
+    .cart-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+    #checkout { margin-top: 12px; width: 100%; padding: 14px; font-size: 16px; }
+    #confirmation { margin-top: 24px; padding: 20px; background: #eafbea; border: 2px solid #2e7d32; border-radius: 8px; display: none; text-align: center; }
+    #confirmation h2 { color: #2e7d32; margin: 0 0 8px; }
+    #order-id { font-family: monospace; font-size: 14px; color: #444; }
+    #loading { color: #888; font-style: italic; }
+    #no-results { color: #888; display: none; padding: 20px 0; }
+  </style>
+</head>
+<body>
+
+<h1>🛒 Naheed Supermarket</h1>
+
+<div id="search-row">
+  <input id="search" placeholder="Search products e.g. Milk, Eggs..." />
+  <button onclick="searchProducts()">Search</button>
+  <button onclick="showAll()" style="background:#888">Show All</button>
+</div>
+
+<div id="loading">Loading products from database...</div>
+<div id="no-results">No products found.</div>
+<div id="results"></div>
+
+<div id="cart">
+  <h2>Cart</h2>
+  <div id="cart-items"></div>
+  <div style="display:flex;justify-content:space-between;font-weight:700;margin-top:10px;padding-top:10px;border-top:2px solid #eee">
+    <span>Total</span>
+    <span id="cart-total">Rs. 0</span>
+  </div>
+  <button id="checkout" onclick="checkout()">Place Order</button>
+</div>
+
+<div id="confirmation">
+  <h2>✅ Order Confirmed!</h2>
+  <p id="order-id"></p>
+  <p style="color:#555;font-size:13px;margin-top:8px">Playwright has completed the automation.</p>
+</div>
+
+<script>
+  const SUPPLIER_ID = 1
+  let allProducts = []
+  let cart = []
+
+  const EMOJI = {
+    'Milk': '🥛', 'Eggs': '🥚', 'Bread': '🍞',
+    'Rice': '🍚', 'Sugar': '🍬', 'Oats': '🌾',
+    'Chicken': '🍗', 'Tomatoes': '🍅', 'Olive Oil': '🫒'
+  }
+
+  async function loadProducts() {
+    try {
+      const res = await fetch(`http://localhost:4000/api/suppliers/${SUPPLIER_ID}/products`)
+      if (!res.ok) throw new Error('Server error')
+      allProducts = await res.json()
+      document.getElementById('loading').style.display = 'none'
+      renderProducts(allProducts)
+    } catch (e) {
+      document.getElementById('loading').textContent =
+        '⚠️ Could not load products. Is Phoenix running on port 4000?'
+    }
+  }
+
+  function renderProducts(list) {
+    const container = document.getElementById('results')
+    const noResults = document.getElementById('no-results')
+
+    if (!list.length) {
+      container.innerHTML = ''
+      noResults.style.display = 'block'
+      return
+    }
+
+    noResults.style.display = 'none'
+    container.innerHTML = list.map(p => `
+      <div class="product" data-id="${p.id}">
+        <div>
+          <div class="product-name">${EMOJI[p.name] || '🛒'} ${p.name}</div>
+          <div class="product-unit">per ${p.unit}</div>
+        </div>
+        <div style="display:flex;align-items:center">
+          <span class="product-price">Rs. ${p.price}</span>
+          <button
+            class="add-to-cart"
+            data-id="${p.id}"
+            data-name="${p.name}"
+            data-price="${p.price}"
+            data-unit="${p.unit}"
+            onclick="addToCart(this)"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    `).join('')
+  }
+
+  function searchProducts() {
+    const q = document.getElementById('search').value.trim().toLowerCase()
+    if (!q) { renderProducts(allProducts); return }
+    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(q))
+    renderProducts(filtered)
+  }
+
+  function showAll() {
+    document.getElementById('search').value = ''
+    renderProducts(allProducts)
+  }
+
+  document.getElementById('search').addEventListener('keydown', e => {
+    if (e.key === 'Enter') searchProducts()
+  })
+
+  function addToCart(btn) {
+    const item = {
+      id: btn.dataset.id,
+      name: btn.dataset.name,
+      price: parseFloat(btn.dataset.price),
+      unit: btn.dataset.unit
+    }
+    cart.push(item)
+    updateCart()
+
+    btn.textContent = 'Added ✓'
+    btn.style.background = '#2e7d32'
+    setTimeout(() => {
+      btn.textContent = 'Add to Cart'
+      btn.style.background = '#c8102e'
+    }, 1000)
+  }
+
+  function updateCart() {
+    document.getElementById('cart').style.display = cart.length ? 'block' : 'none'
+    document.getElementById('cart-items').innerHTML = cart.map(i =>
+      `<div class="cart-item"><span>${EMOJI[i.name] || '🛒'} ${i.name}</span><span>Rs. ${i.price}</span></div>`
+    ).join('')
+    const total = cart.reduce((s, i) => s + i.price, 0)
+    document.getElementById('cart-total').textContent = `Rs. ${total.toFixed(2)}`
+  }
+
+  function checkout() {
+    if (!cart.length) return
+    const orderId = 'NAH-' + Math.floor(Math.random() * 900000 + 100000)
+    document.getElementById('order-id').textContent = 'Order ID: ' + orderId
+    document.getElementById('confirmation').style.display = 'block'
+    document.getElementById('cart').style.display = 'none'
+    document.title = 'ORDER_COMPLETE:' + orderId
+    cart = []
+    updateCart()
+  }
+
+  loadProducts()
+</script>
+</body>
+</html>
