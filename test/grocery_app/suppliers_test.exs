@@ -21,7 +21,11 @@ defmodule GroceryApp.SuppliersTest do
     end
 
     test "create_supplier/1 with valid data creates a supplier" do
-      valid_attrs = %{name: "some name", contact_email: "some contact_email", website_url: "some website_url"}
+      valid_attrs = %{
+        name: "some name",
+        contact_email: "some contact_email",
+        website_url: "some website_url"
+      }
 
       assert {:ok, %Supplier{} = supplier} = Suppliers.create_supplier(valid_attrs)
       assert supplier.name == "some name"
@@ -35,7 +39,12 @@ defmodule GroceryApp.SuppliersTest do
 
     test "update_supplier/2 with valid data updates the supplier" do
       supplier = supplier_fixture()
-      update_attrs = %{name: "some updated name", contact_email: "some updated contact_email", website_url: "some updated website_url"}
+
+      update_attrs = %{
+        name: "some updated name",
+        contact_email: "some updated contact_email",
+        website_url: "some updated website_url"
+      }
 
       assert {:ok, %Supplier{} = supplier} = Suppliers.update_supplier(supplier, update_attrs)
       assert supplier.name == "some updated name"
@@ -81,7 +90,9 @@ defmodule GroceryApp.SuppliersTest do
     test "create_supplier_price/1 with valid data creates a supplier_price" do
       valid_attrs = %{price_per_unit: "120.5"}
 
-      assert {:ok, %SupplierPrice{} = supplier_price} = Suppliers.create_supplier_price(valid_attrs)
+      assert {:ok, %SupplierPrice{} = supplier_price} =
+               Suppliers.create_supplier_price(valid_attrs)
+
       assert supplier_price.price_per_unit == Decimal.new("120.5")
     end
 
@@ -93,13 +104,18 @@ defmodule GroceryApp.SuppliersTest do
       supplier_price = supplier_price_fixture()
       update_attrs = %{price_per_unit: "456.7"}
 
-      assert {:ok, %SupplierPrice{} = supplier_price} = Suppliers.update_supplier_price(supplier_price, update_attrs)
+      assert {:ok, %SupplierPrice{} = supplier_price} =
+               Suppliers.update_supplier_price(supplier_price, update_attrs)
+
       assert supplier_price.price_per_unit == Decimal.new("456.7")
     end
 
     test "update_supplier_price/2 with invalid data returns error changeset" do
       supplier_price = supplier_price_fixture()
-      assert {:error, %Ecto.Changeset{}} = Suppliers.update_supplier_price(supplier_price, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Suppliers.update_supplier_price(supplier_price, @invalid_attrs)
+
       assert supplier_price == Suppliers.get_supplier_price!(supplier_price.id)
     end
 

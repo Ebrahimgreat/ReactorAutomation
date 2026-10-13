@@ -110,7 +110,9 @@ defmodule GroceryApp.Orders do
     )
     |> Repo.one()
     |> case do
-      nil -> :ok
+      nil ->
+        :ok
+
       order ->
         order
         |> Ecto.Changeset.change(status: "cancelled")

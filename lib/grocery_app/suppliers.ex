@@ -198,12 +198,11 @@ defmodule GroceryApp.Suppliers do
     SupplierPrice.changeset(supplier_price, attrs)
   end
 
-
   def find_by_name(name) do
     Repo.get_by(Supplier, name: name)
   end
 
-  #Finding the Cheapest Supplier
+  # Finding the Cheapest Supplier
   def find_cheapest(product_id) do
     from(sp in SupplierPrice,
       where: sp.product_id == ^product_id,
@@ -220,12 +219,11 @@ defmodule GroceryApp.Suppliers do
   def list_products_with_prices(supplier_id) do
     from(sp in SupplierPrice,
       where: sp.supplier_id == ^supplier_id,
-      join: p in GroceryApp.Inventory.Product, on: p.id == sp.product_id,
+      join: p in GroceryApp.Inventory.Product,
+      on: p.id == sp.product_id,
       select: %{id: p.id, name: p.name, unit: p.unit, price: sp.price_per_unit}
     )
     |> Repo.all()
     |> Enum.map(fn row -> %{row | price: Decimal.to_string(row.price)} end)
   end
-
-
 end

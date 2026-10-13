@@ -18,14 +18,14 @@ defmodule GroceryAppWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    live "/grocery",GroceryLive
+    live "/grocery", GroceryLive
   end
 
   # Other scopes may use custom stacks.
-   scope "/api", GroceryAppWeb do
-   pipe_through :api
-   get "/suppliers/by-name/:name/products", SupplierProductController, :by_name
-   get "/suppliers/:supplier_id/products", SupplierProductController, :index
+  scope "/api", GroceryAppWeb do
+    pipe_through :api
+    get "/suppliers/by-name/:name/products", SupplierProductController, :by_name
+    get "/suppliers/:supplier_id/products", SupplierProductController, :index
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

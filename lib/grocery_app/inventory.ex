@@ -105,6 +105,7 @@ defmodule GroceryApp.Inventory do
 
   def refresh_stock(product_id) do
     product = Repo.get!(Product, product_id)
+
     product
     |> Ecto.Changeset.change(current_stock: product.reorder_threshold * 2)
     |> Repo.update()
@@ -112,6 +113,7 @@ defmodule GroceryApp.Inventory do
 
   def restock_product(product_id) do
     product = Repo.get!(Product, product_id)
+
     product
     |> Ecto.Changeset.change(current_stock: product.reorder_threshold * 5)
     |> Repo.update()
@@ -120,6 +122,7 @@ defmodule GroceryApp.Inventory do
   def update_stock(product_id, amount) do
     product = Repo.get!(Product, product_id)
     new_stock = max(product.current_stock - amount, 0)
+
     product
     |> Ecto.Changeset.change(current_stock: new_stock)
     |> Repo.update()
@@ -127,10 +130,9 @@ defmodule GroceryApp.Inventory do
 
   def undo_restock(product_id) do
     product = Repo.get!(Product, product_id)
+
     product
     |> Ecto.Changeset.change(current_stock: product.reorder_threshold - 1)
     |> Repo.update()
   end
-
-
 end

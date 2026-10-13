@@ -97,9 +97,24 @@ config :grocery_app, :foodpanda,
   email: "ebrahimgreat@gmail.com",
   password: "Abdevilliers15*",
   cookies: [
-    %{name: "token", value: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImtleW1ha2VyLXZvbG8tZnAtcGsiLCJ0eXAiOiJKV1QifQ.eyJpZCI6Ing5ODhveG9kNWs4ajJsNjI2dGl2djBxY3djOXQ1b3Fremx2OGhlNWMiLCJjbGllbnRfaWQiOiJ2b2xvIiwidXNlcl9pZCI6ImY4ZXdvNHByIiwiZXhwaXJlcyI6MTc3NDgxNzQwNCwidG9rZW5fdHlwZSI6ImJlYXJlciIsInNjb3BlIjoiQVBJX0NVU1RPTUVSIEFQSV9SRUdJU1RFUkVEX0NVU1RPTUVSIn0.AlSiqjvg-vKWWJriFOUfFBYPgTAHLvBxj4iGbLukJ9mrAmL8907CNcsiuz9EgClyAzz_rr6GcXX2b7Ba9jSnaNhlCkm_ZyB8gPLZD769EBS7JwklQZvAGy3FFMaYDLETO3OcuI0uCNw40x4XIFpUsbCkdBHfnTZ-XDFZym0RP9vmr12OlX6oXM5Jbw2aojyzek2ngoAndff75OmOp_w4iuW76jJGXuMlhDt2jxpjbzOwy7wLf9xfQCzUyrA3uwsT9pyUIRVUUY_r6DwYtcsT3OFjSkON4sS26ZQt3M0GRVY0SWYEuWjwtrBLcaU_xY7-_2MLgPS30241smZlqaaiaw", domain: ".foodpanda.pk"},
-    %{name: "device_token", value: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImtleW1ha2VyLXZvbG8tZGV2aWNlLWZwLXBrIiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwOi8va2V5bWFrZXIuZGVsaXZlcnloZXJvLm5ldCIsInN1YiI6ImY4ZXdvNHByIiwiYXVkIjoidm9sbyIsImV4cCI6NDkyODQwOTgzMywiaWF0IjoxNzc0ODA5ODMzLCJqdGkiOiIyOTA5NWMyMy00NTZhLTQ0ZWYtODc5MS1mNzkzMWY3Mzk3MmMiLCJzY29wZSI6IkRFVklDRV9UT0tFTiIsIm1ldGFkYXRhIjpudWxsfQ.w6dmRILTve0_XYyB7b43DhLdAX0MB5jQp2y6Kh8T-NJbAX3ujMLGHmp8BwEg3fpe_w4QWVgrUJH1L6ZmLFB30dt6YAz8TJ3-cR17Qh2rz27muzv58ky56rPTrHsTE1HLNlgUfVFOthyjrbFzrKz9WXbkNexDcRCDhptuDWil1wMphRJy7uRNqTW_KIkpRJSFd8VaTMTPMI1yPn03HvyTyjyqzzdW38dgrVVDrFSstz6RpWrN-nNMdubx9P68KKzwc2MNxJtgMQ_BfUgZSOzq0dVVNokhUDFcRvQjoL72_Lk1OSxJvwX2uo9TZHP_VbKHqfVg5eL6UGi1S8naAA9LYg", domain: ".foodpanda.pk"},
+    %{
+      name: "token",
+      value:
+        "eyJhbGciOiJSUzI1NiIsImtpZCI6ImtleW1ha2VyLXZvbG8tZnAtcGsiLCJ0eXAiOiJKV1QifQ.eyJpZCI6Ing5ODhveG9kNWs4ajJsNjI2dGl2djBxY3djOXQ1b3Fremx2OGhlNWMiLCJjbGllbnRfaWQiOiJ2b2xvIiwidXNlcl9pZCI6ImY4ZXdvNHByIiwiZXhwaXJlcyI6MTc3NDgxNzQwNCwidG9rZW5fdHlwZSI6ImJlYXJlciIsInNjb3BlIjoiQVBJX0NVU1RPTUVSIEFQSV9SRUdJU1RFUkVEX0NVU1RPTUVSIn0.AlSiqjvg-vKWWJriFOUfFBYPgTAHLvBxj4iGbLukJ9mrAmL8907CNcsiuz9EgClyAzz_rr6GcXX2b7Ba9jSnaNhlCkm_ZyB8gPLZD769EBS7JwklQZvAGy3FFMaYDLETO3OcuI0uCNw40x4XIFpUsbCkdBHfnTZ-XDFZym0RP9vmr12OlX6oXM5Jbw2aojyzek2ngoAndff75OmOp_w4iuW76jJGXuMlhDt2jxpjbzOwy7wLf9xfQCzUyrA3uwsT9pyUIRVUUY_r6DwYtcsT3OFjSkON4sS26ZQt3M0GRVY0SWYEuWjwtrBLcaU_xY7-_2MLgPS30241smZlqaaiaw",
+      domain: ".foodpanda.pk"
+    },
+    %{
+      name: "device_token",
+      value:
+        "eyJhbGciOiJSUzI1NiIsImtpZCI6ImtleW1ha2VyLXZvbG8tZGV2aWNlLWZwLXBrIiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwOi8va2V5bWFrZXIuZGVsaXZlcnloZXJvLm5ldCIsInN1YiI6ImY4ZXdvNHByIiwiYXVkIjoidm9sbyIsImV4cCI6NDkyODQwOTgzMywiaWF0IjoxNzc0ODA5ODMzLCJqdGkiOiIyOTA5NWMyMy00NTZhLTQ0ZWYtODc5MS1mNzkzMWY3Mzk3MmMiLCJzY29wZSI6IkRFVklDRV9UT0tFTiIsIm1ldGFkYXRhIjpudWxsfQ.w6dmRILTve0_XYyB7b43DhLdAX0MB5jQp2y6Kh8T-NJbAX3ujMLGHmp8BwEg3fpe_w4QWVgrUJH1L6ZmLFB30dt6YAz8TJ3-cR17Qh2rz27muzv58ky56rPTrHsTE1HLNlgUfVFOthyjrbFzrKz9WXbkNexDcRCDhptuDWil1wMphRJy7uRNqTW_KIkpRJSFd8VaTMTPMI1yPn03HvyTyjyqzzdW38dgrVVDrFSstz6RpWrN-nNMdubx9P68KKzwc2MNxJtgMQ_BfUgZSOzq0dVVNokhUDFcRvQjoL72_Lk1OSxJvwX2uo9TZHP_VbKHqfVg5eL6UGi1S8naAA9LYg",
+      domain: ".foodpanda.pk"
+    },
     %{name: "pxvid", value: "3083ab82-2b9f-11f1-8ec5-3353cdd30b87", domain: ".foodpanda.pk"},
     %{name: "PXlJuB4eTB_px_c_p_PXlJuB4eTB", value: "0", domain: ".foodpanda.pk"},
-    %{name: "__cf_bm", value: "iL_rRKxjM5SVs7nV1r3TVAwVWiBsIynGfAL1znw.5Ws-1774813804.2831166-1.0.1.1-SYWLQ7xs_ycAWIpbxJ6_Kj5iv9rI97cCCpqZMwGUbmPG2a7UnmLm6YVe3Tw4zHpaltB8aqjpX4tSxNWsw9veDMLOSnP5nTvZtQZUV91c9MMu5Xu4OWdcmvEKPke2XRi1VhSdHbJ0QyZXve1bpkHnlg", domain: ".foodpanda.pk"},
+    %{
+      name: "__cf_bm",
+      value:
+        "iL_rRKxjM5SVs7nV1r3TVAwVWiBsIynGfAL1znw.5Ws-1774813804.2831166-1.0.1.1-SYWLQ7xs_ycAWIpbxJ6_Kj5iv9rI97cCCpqZMwGUbmPG2a7UnmLm6YVe3Tw4zHpaltB8aqjpX4tSxNWsw9veDMLOSnP5nTvZtQZUV91c9MMu5Xu4OWdcmvEKPke2XRi1VhSdHbJ0QyZXve1bpkHnlg",
+      domain: ".foodpanda.pk"
+    }
   ]

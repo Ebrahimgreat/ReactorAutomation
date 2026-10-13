@@ -17,11 +17,12 @@ defmodule GroceryApp.SupplierAutomation do
   def run(supplier_url, product_name) do
     headless = Application.get_env(:grocery_app, :playwright_headless, true)
 
-    with {:ok, browser} <- PlaywrightEx.launch_browser(:chromium,
-           timeout: 30_000,
-           headless: headless,
-           args: ["--no-sandbox"]
-         ),
+    with {:ok, browser} <-
+           PlaywrightEx.launch_browser(:chromium,
+             timeout: 30_000,
+             headless: headless,
+             args: ["--no-sandbox"]
+           ),
          result <- do_run(browser, supplier_url, product_name) do
       Browser.close(browser.guid, timeout: 5_000)
       result
@@ -31,10 +32,11 @@ defmodule GroceryApp.SupplierAutomation do
   defp do_run(browser, url, product_name) do
     product_key = String.downcase(product_name)
 
-    with {:ok, context} <- Browser.new_context(browser.guid,
-           timeout: @timeout,
-           viewport: %{width: 1280, height: 800}
-         ),
+    with {:ok, context} <-
+           Browser.new_context(browser.guid,
+             timeout: @timeout,
+             viewport: %{width: 1280, height: 800}
+           ),
          {:ok, page} <- BrowserContext.new_page(context.guid, timeout: @timeout) do
       browse(page.guid, page.main_frame.guid, url, product_key)
     end
@@ -46,17 +48,20 @@ defmodule GroceryApp.SupplierAutomation do
     with {:ok, _} <- Frame.goto(fid, url: url, timeout: @timeout),
          # Let the page visually settle before doing anything
          :ok <- human_pause(1_200, 2_000),
-         {:ok, _} <- Frame.wait_for_selector(fid,
-           selector: "#product-catalog",
-           timeout: @timeout
-         ),
+         {:ok, _} <-
+           Frame.wait_for_selector(fid,
+             selector: "#product-catalog",
+             timeout: @timeout
+           ),
          # Simulate reading/scanning the catalog
          :ok <- human_pause(800, 1_500),
          # Resolve the button's bounding box
-         {:ok, box} <- Frame.evaluate(fid,
-           expression: ~s[(function(){ var el = document.querySelector("#{selector}"); if (!el) return null; var r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; })()],
-           timeout: @timeout
-         ),
+         {:ok, box} <-
+           Frame.evaluate(fid,
+             expression:
+               ~s[(function(){ var el = document.querySelector("#{selector}"); if (!el) return null; var r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; })()],
+             timeout: @timeout
+           ),
          # Pick a natural click point within the button
          {:ok, {tx, ty}} <- random_point_in_box(box),
          # Smoothly glide the cursor from its starting position to the button
@@ -68,10 +73,11 @@ defmodule GroceryApp.SupplierAutomation do
          {:ok, _} <- Page.mouse_up(pid, timeout: @timeout),
          # Brief pause while the page processes the click
          :ok <- human_pause(600, 1_000),
-         {:ok, _} <- Frame.wait_for_selector(fid,
-           selector: "#order-confirmation",
-           timeout: @timeout
-         ) do
+         {:ok, _} <-
+           Frame.wait_for_selector(fid,
+             selector: "#order-confirmation",
+             timeout: @timeout
+           ) do
       {:ok, "Order placed on supplier site for #{product_key}"}
     end
   end
@@ -80,7 +86,8 @@ defmodule GroceryApp.SupplierAutomation do
   # random jitter on each step, mimicking a real hand moving across the screen.
   defp smooth_mouse_move(pid, x0, y0, x1, y1) do
     steps = 25
-    delay_per_step = 18  # ms — gives ~450 ms total travel time
+    # ms — gives ~450 ms total travel time
+    delay_per_step = 18
 
     Enum.reduce_while(1..steps, :ok, fn i, :ok ->
       t = i / steps
@@ -109,6 +116,7 @@ defmodule GroceryApp.SupplierAutomation do
     cy = y + margin_y + :rand.uniform_real() * (h - margin_y * 2)
     {:ok, {cx, cy}}
   end
+
   defp random_point_in_box(nil), do: {:error, :element_not_found}
 
   # Sleeps for a random duration between min_ms and max_ms milliseconds.

@@ -12,7 +12,11 @@ defmodule GroceryApp.Application do
       GroceryApp.Repo,
       {DNSCluster, query: Application.get_env(:grocery_app, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: GroceryApp.PubSub},
-{PlaywrightEx.Supervisor, [executable: Path.join([File.cwd!(), "assets/node_modules/.bin/playwright"]), timeout: 30_000]},
+      {PlaywrightEx.Supervisor,
+       [
+         executable: Path.join([File.cwd!(), "assets/node_modules/.bin/playwright"]),
+         timeout: 30_000
+       ]},
       GroceryAppWeb.Endpoint
     ]
 
